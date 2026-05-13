@@ -20,8 +20,6 @@ export interface UserData {
   supplements: string[];
   dietaryRestrictions?: string;
   preferences?: string;
-  weekendAlcohol?: string;
-  weekendCheatMeals?: string;
 }
 
 export interface DetailedPlan {
@@ -33,18 +31,6 @@ export interface DetailedPlan {
     fats: number;
     water: number;
   };
-  bodyMetrics?: {
-    bf: number;
-    ffmi: number;
-    imc: number;
-    tmb: number;
-    dailyExpenditure: number;
-  };
-  adjustments?: {
-    date: string;
-    reason: string;
-    newCalories: number;
-  }[];
 }
 
 export interface HistoryEntry {
@@ -55,13 +41,4 @@ export interface HistoryEntry {
   waterIntake?: number;
   workoutCompleted: boolean;
   cardioMinutes: number;
-  freeMeal?: {
-    intensity: 'Leve' | 'Média' | 'Pesada' | 'Exagerei';
-    date: string;
-  };
-  // Check-in specific fields
-  isWeeklyCheckin?: boolean;
-  energyLevel?: number; // 1-5
-  hungerLevel?: number; // 1-5
-  adherenceLevel?: number; // 1-5 (Percentage scale in UI maybe?)
 }

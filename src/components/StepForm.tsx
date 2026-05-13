@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { UserData, Goal, ActivityLevel, ExperienceLevel } from "../types";
-import { ChevronRight, ChevronLeft, Target, Gauge, Heart, Utensils, Award, AlertCircle, Timer, Zap, GlassWater, Cookie } from "lucide-react";
+import { ChevronRight, ChevronLeft, Target, Gauge, Heart, Utensils, Award, AlertCircle, Timer, Zap } from "lucide-react";
 
 interface StepFormProps {
   onSubmit: (data: UserData) => void;
@@ -22,8 +22,6 @@ export default function StepForm({ onSubmit, isLoading }: StepFormProps) {
     mainDifficulty: '',
     cardioPreference: '',
     supplements: [],
-    weekendAlcohol: 'Não',
-    weekendCheatMeals: 'Não',
   });
 
   const nextStep = () => setStep(s => s + 1);
@@ -46,7 +44,6 @@ export default function StepForm({ onSubmit, isLoading }: StepFormProps) {
     if (step === 6) return (formData.preferredProteins?.length || 0) > 0 || (formData.preferredCarbs?.length || 0) > 0;
     if (step === 7) return !!formData.mainDifficulty;
     if (step === 8) return !!formData.cardioPreference;
-    if (step === 10) return !!formData.weekendAlcohol && !!formData.weekendCheatMeals;
     return true;
   };
 
@@ -465,65 +462,6 @@ export default function StepForm({ onSubmit, isLoading }: StepFormProps) {
             </div>
           </motion.div>
         );
-      case 10:
-        return (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="space-y-8"
-          >
-            <div className="text-center mb-4">
-              <span className="text-primary text-[10px] uppercase font-bold tracking-[0.2em] mb-2 block">Etapa 10</span>
-              <h2 className="text-3xl font-display uppercase tracking-tight">Final de Semana</h2>
-              <p className="text-[10px] text-white/40 uppercase font-bold mt-2">Acomodando sua vida social na estratégia</p>
-            </div>
-
-            <div className="space-y-8">
-              <div>
-                <label className="flex items-center gap-2 text-white/40 text-[10px] uppercase font-bold tracking-widest mb-4 px-1">
-                  <GlassWater size={14} className="text-primary" /> Vai beber esse final de semana?
-                </label>
-                <div className="grid grid-cols-2 gap-2">
-                  {['Não', '1 dia', '2 dias', '3+ dias'].map((opt) => (
-                    <button
-                      key={opt}
-                      onClick={() => setFormData({ ...formData, weekendAlcohol: opt })}
-                      className={`py-3 rounded-xl border text-[10px] font-bold uppercase transition-all ${
-                        formData.weekendAlcohol === opt
-                          ? 'border-primary bg-primary/10 text-primary'
-                          : 'border-white/10 bg-white/5 text-white/60 hover:border-white/30'
-                      }`}
-                    >
-                      {opt}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <label className="flex items-center gap-2 text-white/40 text-[10px] uppercase font-bold tracking-widest mb-4 px-1">
-                  <Cookie size={14} className="text-accent" /> Vai fazer refeição livre?
-                </label>
-                <div className="grid grid-cols-2 gap-2">
-                  {['Não', '1 refeição', '2 refeições', 'Livre'].map((opt) => (
-                    <button
-                      key={opt}
-                      onClick={() => setFormData({ ...formData, weekendCheatMeals: opt })}
-                      className={`py-3 rounded-xl border text-[10px] font-bold uppercase transition-all ${
-                        formData.weekendCheatMeals === opt
-                          ? 'border-accent bg-accent/10 text-accent'
-                          : 'border-white/10 bg-white/5 text-white/60 hover:border-white/30'
-                      }`}
-                    >
-                      {opt}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        );
       default:
         return null;
     }
@@ -537,7 +475,7 @@ export default function StepForm({ onSubmit, isLoading }: StepFormProps) {
           <motion.div 
             className="h-full bg-primary shadow-[0_0_10px_#D4FF00]"
             initial={{ width: '0%' }}
-            animate={{ width: `${(step / 10) * 100}%` }}
+            animate={{ width: `${(step / 9) * 100}%` }}
           />
         </div>
 
@@ -558,7 +496,7 @@ export default function StepForm({ onSubmit, isLoading }: StepFormProps) {
             </button>
           ) : <div />}
 
-          {step < 10 ? (
+          {step < 9 ? (
             <button
               disabled={!isStepValid()}
               onClick={nextStep}

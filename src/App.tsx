@@ -9,7 +9,7 @@ import StepForm from "./components/StepForm";
 import Dashboard from "./components/Dashboard";
 import ProcessingScreen from "./components/ProcessingScreen";
 import { UserData, DetailedPlan, HistoryEntry } from "./types";
-import { generateFitnessPlan, adjustPlan } from "./services/geminiService";
+import { generateFitnessPlan } from "./services/geminiService";
 import { motion, AnimatePresence } from "motion/react";
 
 export default function App() {
@@ -45,6 +45,7 @@ export default function App() {
       setUserData(data);
       setView('plan');
       
+      // Save initial state
       localStorage.setItem('metafit_plan', JSON.stringify(result));
       localStorage.setItem('metafit_user', JSON.stringify(data));
     } catch (err: any) {
@@ -55,26 +56,12 @@ export default function App() {
     }
   };
 
-  const handleSaveHistory = async (entry: HistoryEntry) => {
+  const handleSaveHistory = (entry: HistoryEntry) => {
     const newHistory = [...history, entry].sort((a, b) => 
       new Date(a.date).getTime() - new Date(b.date).getTime()
     );
     setHistory(newHistory);
     localStorage.setItem('metafit_history', JSON.stringify(newHistory));
-
-    // If it's a weekly check-in, trigger adjustment
-    if (entry.isWeeklyCheckin && plan && userData) {
-      setIsLoading(true);
-      try {
-        const adjustedPlan = await adjustPlan(userData, plan, newHistory);
-        setPlan(adjustedPlan);
-        localStorage.setItem('metafit_plan', JSON.stringify(adjustedPlan));
-      } catch (err) {
-        console.error("Failed to adjust plan:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    }
   };
 
   const handleReset = () => {
