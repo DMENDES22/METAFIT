@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  
+  --color-primary: #D4FF00;
+  --color-accent: #FFB800;
+  --border-radius-xl: 1.5rem;
+}
+
+@layer base {
+  body {
+    @apply bg-[#0F0F0F] text-white antialiased selection:bg-primary selection:text-black;
+  }
+}
+
+.fitness-grid {
+  background-image: radial-gradient(rgba(212, 255, 0, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.glow-card {
+  box-shadow: 0 0 20px rgba(212, 255, 0, 0.05);
+}
