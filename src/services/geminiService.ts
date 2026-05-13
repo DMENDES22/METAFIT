@@ -1,7 +1,21 @@
 import { GoogleGenAI } from "@google/genai";
 import { UserData, DetailedPlan, Goal, ActivityLevel, HistoryEntry } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
+async function callAi(prompt: string): Promise<string> {
+  const response = await fetch("/api/generate-plan", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ prompt }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || "Erro na comunicação com o servidor.");
+  }
+
+  const data = await response.json();
+  return data.text;
+}
 
 export async function generateFitnessPlan(userData: UserData): Promise<DetailedPlan> {
   const goalMap: Record<Goal, string> = {
@@ -86,12 +100,8 @@ export async function generateFitnessPlan(userData: UserData): Promise<DetailedP
   `;
 
   try {
-    const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
-      contents: prompt,
-    });
+    const text = await callAi(prompt);
 
-    const text = response.text || "";
     const metricsRegex = /<METRICS>([\s\S]*?)<\/METRICS>/;
     const match = text.match(metricsRegex);
     
@@ -122,6 +132,7 @@ export async function generateFitnessPlan(userData: UserData): Promise<DetailedP
     throw new Error("Falha na comunicação com a IA.");
   }
 }
+
 export async function adjustPlan(
   userData: UserData,
   currentPlan: DetailedPlan,
@@ -177,12 +188,8 @@ export async function adjustPlan(
   `;
 
   try {
-    const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
-      contents: prompt,
-    });
+    const text = await callAi(prompt);
 
-    const text = response.text || "";
     const metricsRegex = /<METRICS>([\s\S]*?)<\/METRICS>/;
     const match = text.match(metricsRegex);
     
